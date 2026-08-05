@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Horizontal Scroll Sub-Categories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+    background: #faf8f5; 
+    padding: 16px 12px;
+    overflow-x: hidden;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+html {
+    overflow-x: hidden;
+    width: 100%;
+}
+.container { 
+    max-width: 1200px; 
+    margin: 0 auto;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* ===== HEADER ===== */
+.page-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.page-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #ff6b00, #ff1493, #2563eb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+.page-header p {
+    color: #64748b;
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+/* ===== FILTER SECTION ===== */
+.filter-section {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    margin-bottom: 30px;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.filter-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.filter-row label {
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 70px;
+    flex-shrink: 0;
+    letter-spacing: -0.01em;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.filter-row label .icon {
+    font-size: 1rem;
+}
+
+/* ===== MAIN DROPDOWN ===== */
+.dropdown-wrapper {
+    min-width: 160px;
+    position: relative;
+    flex-shrink: 0;
+    flex: 1;
+}
+
+.dropdown-wrapper select {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: white;
+    color: #1e293b;
+    cursor: pointer;
+    transition: 0.3s;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748b' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    letter-spacing: -0.01em;
+}
+
+.dropdown-wrapper select:hover {
+    border-color: #ff6b00;
+}
+
+.dropdown-wrapper select:focus {
+    outline: none;
+    border-color: #ff6b00;
+    box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.08);
+}
+
+/* ===== SUB-CATEGORY HORIZONTAL SCROLL ===== */
+.sub-scroll-wrapper {
+    flex: 1;
+    min-width: 100%;
+    display: none;
+    width: 100%;
+}
+
+.sub-scroll-wrapper.visible {
+    display: block;
+    animation: slideDown 0.4s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== SCROLL CONTAINER ===== */
+.sub-scroll-container {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: visible;
+    padding: 8px 4px 20px 4px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    min-height: 60px;
+    align-items: center;
+    scrollbar-width: thin;
+    width: 100%;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    touch-action: pan-x;
+    cursor: grab;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    margin-top: 16px;
+    transition: padding-bottom 0.3s ease;
+}
+
+/* ===== EXTRA SPACE WHEN DROPDOWN IS OPEN ===== */
+.sub-scroll-container.dropdown-open {
+    padding-bottom: 160px; /* ← 140px extra space (20px base + 140px = 160px) */
+}
+
+.sub-scroll-container:active {
+    cursor: grabbing;
+}
+
+.sub-scroll-container::-webkit-scrollbar {
+    height: 4px;
+}
+
+.sub-scroll-container::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+
+.sub-scroll-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #ff6b00, #ff1493, #2563eb);
+    border-radius: 10px;
+}
+
+/* ===== SUB-CATEGORY DROPDOWN BUTTON ===== */
+.sub-dropdown-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.sub-dropdown-btn {
+    padding: 8px 20px;
+    border-radius: 30px;
+    border: 2px solid #e2e8f0;
+    background: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #64748b;
+    white-space: nowrap;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    position: relative;
+    border: 2px solid #e2e8f0;
+}
+
+.sub-dropdown-btn:hover {
+    border-color: #ff6b00;
+    color: #ff6b00;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(255, 107, 0, 0.12);
+}
+
+.sub-dropdown-btn .arrow {
+    font-size: 0.6rem;
+    transition: transform 0.3s ease;
+}
+
+.sub-dropdown-btn.active {
+    background: linear-gradient(135deg, #ff6b00, #ff1493, #2563eb);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 20px rgba(255, 107, 0, 0.3);
+    transform: translateY(-1px);
+}
+
+.sub-dropdown-btn.active .arrow {
+    transform: rotate(180deg);
+}
+
+/* ===== DROPDOWN MENU ===== */
+.sub-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 220px;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.15);
+    border: 1px solid #e8edf2;
+    padding: 8px;
+    z-index: 1000;
+    animation: dropdownFade 0.25s ease;
+}
+
+.sub-dropdown-menu.open {
+    display: block;
+}
+
+@keyframes dropdownFade {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+}
+
+.sub-dropdown-menu .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    width: 100%;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #1e293b;
+    cursor: pointer;
+    transition: 0.2s;
+    text-align: left;
+}
+
+.sub-dropdown-menu .menu-item:hover {
+    background: #f1f5f9;
+}
+
+.sub-dropdown-menu .menu-item .count {
+    margin-left: auto;
+    background: #f1f5f9;
+    padding: 0 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    color: #64748b;
+}
+
+.sub-dropdown-menu .menu-item.active {
+    background: linear-gradient(135deg, #ff6b00, #ff1493, #2563eb);
+    color: white;
+}
+
+.sub-dropdown-menu .menu-item.active .count {
+    background: rgba(255,255,255,0.2);
+    color: white;
+}
+
+/* ===== REGULAR SUB-CATEGORY BUTTONS ===== */
+.sub-btn {
+    flex-shrink: 0;
+    padding: 8px 20px;
+    border-radius: 30px;
+    border: 2px solid #e2e8f0;
+    background: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #64748b;
+    white-space: nowrap;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    position: relative;
+    border: 2px solid #e2e8f0;
+}
+
+.sub-btn:hover {
+    border-color: #ff6b00;
+    color: #ff6b00;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(255, 107, 0, 0.12);
+}
+
+.sub-btn.active {
+    background: linear-gradient(135deg, #ff6b00, #ff1493, #2563eb);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 4px 20px rgba(255, 107, 0, 0.3);
+    transform: translateY(-1px);
+}
+
+.sub-btn .count {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 0 8px;
+    border-radius: 12px;
+    font-size: 0.65rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.sub-btn.active .count {
+    background: rgba(255,255,255,0.25);
+}
+
+/* ===== PRODUCT GRID ===== */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+    min-height: 150px;
+    width: 100%;
+}
+
+.product-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    border: 1px solid #f1f5f9;
+    transition: 0.3s;
+    display: none;
+}
+
+.product-card.visible {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    border-color: #e2e8f0;
+}
+
+.product-card .icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.product-card h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #1e293b;
+    letter-spacing: -0.02em;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.product-card .category-tag {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    font-weight: 400;
+}
+
+.product-card .sub-tag {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 500;
+    background: #f1f5f9;
+    color: #64748b;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #94a3b8;
+    grid-column: 1 / -1;
+}
+
+.empty-state .big-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-size: 1rem;
+    color: #64748b;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.empty-state p {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    font-weight: 400;
+}
+
+.empty-state.hidden {
+    display: none;
+}
+
+/* ===== HINT TEXT ===== */
+.hint-text {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: 8px;
+    display: none;
+    align-items: center;
+    gap: 6px;
+    font-weight: 400;
+}
+
+.hint-text.show {
+    display: flex;
+}
+
+.hint-text .step {
+    display: inline-block;
+    background: #f1f5f9;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: #64748b;
+}
+
+/* ============================================ */
+/* MOBILE RESPONSIVE */
+/* ============================================ */
+@media (max-width: 768px) {
+    body {
+        padding: 12px 10px;
+        width: 100%;
+        overflow-x: hidden;
+    }
+    
+    .container {
+        width: 100%;
+        padding: 0;
+        overflow-x: hidden;
+    }
+    
+    .filter-section {
+        padding: 16px;
+        border-radius: 12px;
+        width: 100%;
+        overflow-x: hidden;
+    }
+    
+    .filter-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        width: 100%;
+    }
+    
+    .filter-row label {
+        min-width: auto;
+        font-size: 0.75rem;
+        padding-top: 0;
+        width: 100%;
+    }
+    
+    .dropdown-wrapper {
+        min-width: 100%;
+        width: 100%;
+        flex: none;
+    }
+    
+    .dropdown-wrapper select {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+        width: 100%;
+    }
+    
+    .sub-scroll-wrapper {
+        min-width: 100%;
+        width: 100%;
+    }
+    
+    .sub-scroll-container {
+        padding: 6px 2px 16px 2px;
+        gap: 8px;
+        min-height: 50px;
+        width: 100%;
+        -webkit-overflow-scrolling: touch;
+        overflow-x: auto;
+        overflow-y: visible;
+        margin-top: 12px;
+    }
+    
+    .sub-scroll-container.dropdown-open {
+        padding-bottom: 156px; /* ← 140px extra space on tablet */
+    }
+    
+    .sub-scroll-container::-webkit-scrollbar {
+        height: 3px;
+    }
+    
+    .sub-dropdown-btn {
+        padding: 6px 14px;
+        font-size: 0.85rem;
+        height: 36px;
+        border-width: 1.5px;
+    }
+    
+    .sub-btn {
+        padding: 6px 14px;
+        font-size: 0.85rem;
+        height: 36px;
+        border-width: 1.5px;
+        font-weight: 500;
+        border: 1.5px solid #e2e8f0;
+    }
+    
+    .sub-btn.active {
+        border-color: transparent;
+    }
+    
+    .sub-dropdown-menu {
+        min-width: 200px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 6px;
+    }
+    
+    .sub-dropdown-menu .menu-item {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+    }
+    
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 12px;
+        width: 100%;
+    }
+    
+    .product-card {
+        padding: 16px 12px;
+    }
+    
+    .product-card .icon {
+        font-size: 1.8rem;
+    }
+    
+    .product-card h4 {
+        font-size: 0.8rem;
+    }
+    
+    .empty-state {
+        padding: 30px 15px;
+    }
+    
+    .empty-state .big-icon {
+        font-size: 2.5rem;
+    }
+    
+    .empty-state h3 {
+        font-size: 0.9rem;
+    }
+    
+    .empty-state p {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 8px 6px;
+    }
+    
+    .filter-section {
+        padding: 12px;
+        border-radius: 10px;
+    }
+    
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .product-card {
+        padding: 14px 10px;
+    }
+    
+    .product-card .icon {
+        font-size: 1.5rem;
+    }
+    
+    .product-card h4 {
+        font-size: 0.75rem;
+    }
+    
+    .sub-btn {
+        padding: 4px 12px;
+        font-size: 0.8rem;
+        height: 32px;
+        border: 1.5px solid #e2e8f0;
+    }
+    
+    .sub-btn.active {
+        border-color: transparent;
+    }
+    
+    .sub-dropdown-btn {
+        padding: 4px 12px;
+        font-size: 0.8rem;
+        height: 32px;
+        border: 1.5px solid #e2e8f0;
+    }
+    
+    .sub-scroll-container {
+        min-height: 42px;
+        padding: 4px 2px 14px 2px;
+        gap: 6px;
+        margin-top: 10px;
+    }
+    
+    .sub-scroll-container.dropdown-open {
+        padding-bottom: 152px; /* ← 140px extra space on mobile */
+    }
+    
+    .sub-dropdown-menu {
+        min-width: 180px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 4px;
+    }
+    
+    .sub-dropdown-menu .menu-item {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .dropdown-wrapper select {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- ===== FILTER SECTION ===== -->
+<div class="filter-section">
+    <div class="filter-row">
+        <label>
+            <span class="icon">⚡</span> Our Services
+        </label>
+        <div class="dropdown-wrapper">
+            <select id="mainCategory" onchange="handleMainChange(this.value)">
+                <option value="">Select a service...</option>
+                <option value="web">🌐 Web Development</option>
+                <option value="app">📱 App Development</option>
+                <option value="marketing">📈 Digital Marketing</option>
+                <option value="design">🎨 Graphic Design</option>
+            </select>
+        </div>
+
+        <div class="sub-scroll-wrapper" id="subWrapper">
+            <div class="sub-scroll-container" id="subContainer">
+                <!-- Sub-category buttons will be inserted here -->
+            </div>
+        </div>
+    </div>
+    <div class="hint-text show" id="hint">
+        <span class="step">1</span> Select a service
+        <span style="margin:0 8px; color:#e2e8f0;">|</span>
+        <span class="step">2</span> Click a sub-category
+    </div>
+</div>
+
+<!-- Product Grid -->
+<div class="product-grid" id="grid">
+    <div class="empty-state" id="empty">
+        <div class="big-icon">🔍</div>
+        <h3>Select a service & sub-category</h3>
+        <p>Choose from the options above to see products</p>
+    </div>
+    
+    <div class="product-card" data-category="web" data-sub="landing">
+        <div class="icon">🖥️</div>
+        <h4>Landing Page Pro</h4>
+        <div class="category-tag">Web</div>
+        <div class="sub-tag">Landing</div>
+    </div>
+    <div class="product-card" data-category="web" data-sub="brochure">
+        <div class="icon">📄</div>
+        <h4>Brochure Site</h4>
+        <div class="category-tag">Web</div>
+        <div class="sub-tag">Brochure</div>
+    </div>
+    <div class="product-card" data-category="web" data-sub="blog">
+        <div class="icon">✍️</div>
+        <h4>Blog Platform</h4>
+        <div class="category-tag">Web</div>
+        <div class="sub-tag">Blog</div>
+    </div>
+    <div class="product-card" data-category="web" data-sub="ecommerce">
+        <div class="icon">🛒</div>
+        <h4>E-Commerce Store</h4>
+        <div class="category-tag">Web</div>
+        <div class="sub-tag">E-Commerce</div>
+    </div>
+    <div class="product-card" data-category="web" data-sub="core">
+        <div class="icon">⚙️</div>
+        <h4>Core Web Services</h4>
+        <div class="category-tag">Web</div>
+        <div class="sub-tag">Core Web</div>
+    </div>
+    <div class="product-card" data-category="web" data-sub="management">
+        <div class="icon">📊</div>
+        <h4>Management & Finance</h4>
+        <div class="category-tag">Web</div>
+        <div class="sub-tag">Management</div>
+    </div>
+    <div class="product-card" data-category="app" data-sub="inventory">
+        <div class="icon">📦</div>
+        <h4>Inventory System</h4>
+        <div class="category-tag">App</div>
+        <div class="sub-tag">Inventory</div>
+    </div>
+    <div class="product-card" data-category="app" data-sub="finance">
+        <div class="icon">💰</div>
+        <h4>Finance Manager</h4>
+        <div class="category-tag">App</div>
+        <div class="sub-tag">Finance</div>
+    </div>
+    <div class="product-card" data-category="app" data-sub="complete">
+        <div class="icon">🔄</div>
+        <h4>Complete System</h4>
+        <div class="category-tag">App</div>
+        <div class="sub-tag">Complete</div>
+    </div>
+    <div class="product-card" data-category="app" data-sub="premium">
+        <div class="icon">⭐</div>
+        <h4>Premium Plans</h4>
+        <div class="category-tag">App</div>
+        <div class="sub-tag">Premium</div>
+    </div>
+    <div class="product-card" data-category="marketing" data-sub="seo">
+        <div class="icon">🔍</div>
+        <h4>SEO Package</h4>
+        <div class="category-tag">Marketing</div>
+        <div class="sub-tag">SEO</div>
+    </div>
+    <div class="product-card" data-category="marketing" data-sub="social">
+        <div class="icon">📱</div>
+        <h4>Social Media</h4>
+        <div class="category-tag">Marketing</div>
+        <div class="sub-tag">Social</div>
+    </div>
+    <div class="product-card" data-category="marketing" data-sub="email">
+        <div class="icon">✉️</div>
+        <h4>Email Marketing</h4>
+        <div class="category-tag">Marketing</div>
+        <div class="sub-tag">Email</div>
+    </div>
+    <div class="product-card" data-category="design" data-sub="brand">
+        <div class="icon">✨</div>
+        <h4>Brand Identity</h4>
+        <div class="category-tag">Design</div>
+        <div class="sub-tag">Brand Kit</div>
+    </div>
+    <div class="product-card" data-category="design" data-sub="social">
+        <div class="icon">📸</div>
+        <h4>Social Templates</h4>
+        <div class="category-tag">Design</div>
+        <div class="sub-tag">Social</div>
+    </div>
+    <div class="product-card" data-category="design" data-sub="print">
+        <div class="icon">🖨️</div>
+        <h4>Print Design</h4>
+        <div class="category-tag">Design</div>
+        <div class="sub-tag">Print</div>
+    </div>
+</div>
+
+</div>
+
+<script>
+// ============================================
+// SUB-CATEGORY DATA
+// ============================================
+const subCategoriesData = {
+    web: [
+        { value: 'landing', label: '🖥️ Landing Page', count: 3 },
+        { value: 'brochure', label: '📄 Brochure Site', count: 3 },
+        { value: 'blog', label: '✍️ Blog', count: 3 },
+        { value: 'ecommerce', label: '🛒 E-Commerce', count: 3 },
+        { value: 'core', label: '⚙️ Core Web', count: 1 },
+        { value: 'management', label: '📊 Management', count: 4 }
+    ],
+    app: [
+        { value: 'inventory', label: '📦 Inventory', count: 1 },
+        { value: 'finance', label: '💰 Finance', count: 1 },
+        { value: 'complete', label: '🔄 Complete System', count: 1 },
+        { value: 'premium', label: '⭐ Premium Plans', count: 1 }
+    ],
+    marketing: [
+        { value: 'seo', label: '🔍 SEO', count: 1 },
+        { value: 'social', label: '📱 Social Media', count: 1 },
+        { value: 'email', label: '✉️ Email Marketing', count: 1 }
+    ],
+    design: [
+        { value: 'brand', label: '✨ Brand Kit', count: 1 },
+        { value: 'social', label: '📸 Social Templates', count: 1 },
+        { value: 'print', label: '🖨️ Print Design', count: 1 }
+    ]
+};
+
+// Group web design sub-categories
+const webDesignGroup = [
+    { value: 'landing', label: '🖥️ Landing Page', count: 3 },
+    { value: 'brochure', label: '📄 Brochure Site', count: 3 },
+    { value: 'blog', label: '✍️ Blog', count: 3 },
+    { value: 'ecommerce', label: '🛒 E-Commerce', count: 3 }
+];
+
+let selectedWebSubValue = null;
+let dropdownBtn = null;
+let dropdownMenu = null;
+let subContainer = null;
+
+// ============================================
+// HANDLE MAIN CATEGORY CHANGE
+// ============================================
+function handleMainChange(mainValue) {
+    const subWrapper = document.getElementById('subWrapper');
+    subContainer = document.getElementById('subContainer');
+    const hint = document.getElementById('hint');
+    const empty = document.getElementById('empty');
+    const grid = document.getElementById('grid');
+    
+    // Clear existing sub-buttons
+    subContainer.innerHTML = '';
+    selectedWebSubValue = null;
+    
+    // Remove dropdown-open class when switching categories
+    if (subContainer) {
+        subContainer.classList.remove('dropdown-open');
+    }
+    
+    if (mainValue && mainValue !== '') {
+        // Show sub-scroll wrapper
+        subWrapper.classList.add('visible');
+        hint.classList.remove('show');
+        hint.style.display = 'none';
+        
+        // Add sub-category buttons
+        if (subCategoriesData[mainValue]) {
+            const items = subCategoriesData[mainValue];
+            
+            // For Web Development, group the first 4 items into a dropdown
+            if (mainValue === 'web') {
+                // Create dropdown button for Web Designs (Landing, Brochure, Blog, E-Commerce)
+                const dropdownWrapper = document.createElement('div');
+                dropdownWrapper.className = 'sub-dropdown-wrapper';
+                
+                dropdownBtn = document.createElement('button');
+                dropdownBtn.className = 'sub-dropdown-btn';
+                dropdownBtn.innerHTML = `📄 Web Designs <span class="count">12</span> <span class="arrow">▼</span>`;
+                dropdownBtn.onclick = function(e) {
+                    e.stopPropagation();
+                    this.classList.toggle('active');
+                    const menu = this.nextElementSibling;
+                    menu.classList.toggle('open');
+                    
+                    // Add/remove dropdown-open class on subContainer
+                    if (subContainer) {
+                        if (menu.classList.contains('open')) {
+                            subContainer.classList.add('dropdown-open');
+                        } else {
+                            subContainer.classList.remove('dropdown-open');
+                        }
+                    }
+                };
+                
+                dropdownMenu = document.createElement('div');
+                dropdownMenu.className = 'sub-dropdown-menu';
+                
+                // Add the 4 web design items to the dropdown menu
+                webDesignGroup.forEach(sub => {
+                    const menuItem = document.createElement('button');
+                    menuItem.className = 'menu-item';
+                    menuItem.dataset.value = sub.value;
+                    menuItem.innerHTML = `${sub.label} <span class="count">${sub.count}</span>`;
+                    menuItem.onclick = function(e) {
+                        e.stopPropagation();
+                        // Update selected value
+                        selectedWebSubValue = sub.value;
+                        
+                        // Update dropdown button text
+                        const labelText = sub.label.replace(/^[^\s]+\s/, '');
+                        dropdownBtn.innerHTML = `${sub.label} <span class="count">${sub.count}</span> <span class="arrow">▼</span>`;
+                        dropdownBtn.classList.add('active');
+                        
+                        // Highlight selected in menu
+                        dropdownMenu.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        // Close dropdown
+                        dropdownMenu.classList.remove('open');
+                        dropdownBtn.classList.remove('active');
+                        
+                        // Remove dropdown-open class
+                        if (subContainer) {
+                            subContainer.classList.remove('dropdown-open');
+                        }
+                        
+                        // Trigger product filtering
+                        handleSubClick(mainValue, sub.value);
+                    };
+                    dropdownMenu.appendChild(menuItem);
+                });
+                
+                dropdownWrapper.appendChild(dropdownBtn);
+                dropdownWrapper.appendChild(dropdownMenu);
+                subContainer.appendChild(dropdownWrapper);
+                
+                // Add the remaining web items (Core Web, Management) as regular buttons
+                const remainingItems = items.slice(4);
+                remainingItems.forEach(sub => {
+                    const btn = document.createElement('button');
+                    btn.className = 'sub-btn';
+                    btn.dataset.value = sub.value;
+                    btn.dataset.category = mainValue;
+                    btn.innerHTML = `${sub.label} <span class="count">${sub.count}</span>`;
+                    btn.onclick = function(e) {
+                        e.preventDefault();
+                        // Remove active from dropdown if it was selected
+                        if (dropdownBtn) dropdownBtn.classList.remove('active');
+                        if (dropdownMenu) {
+                            dropdownMenu.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+                        }
+                        // Remove dropdown-open class
+                        if (subContainer) {
+                            subContainer.classList.remove('dropdown-open');
+                        }
+                        selectedWebSubValue = null;
+                        handleSubClick(mainValue, sub.value);
+                    };
+                    subContainer.appendChild(btn);
+                });
+            } else {
+                // For other categories, show all as regular buttons
+                items.forEach(sub => {
+                    const btn = document.createElement('button');
+                    btn.className = 'sub-btn';
+                    btn.dataset.value = sub.value;
+                    btn.dataset.category = mainValue;
+                    btn.innerHTML = `${sub.label} <span class="count">${sub.count}</span>`;
+                    btn.onclick = function(e) {
+                        e.preventDefault();
+                        handleSubClick(mainValue, sub.value);
+                    };
+                    subContainer.appendChild(btn);
+                });
+            }
+        }
+        
+        // Reset products
+        hideAllProducts();
+        if (empty) empty.classList.remove('hidden');
+        
+        // Reset active state for regular buttons
+        subContainer.querySelectorAll('.sub-btn').forEach(b => b.classList.remove('active'));
+        
+    } else {
+        // Hide sub-scroll wrapper
+        subWrapper.classList.remove('visible');
+        hint.classList.add('show');
+        hint.style.display = 'flex';
+        
+        // Hide all products and show empty state
+        hideAllProducts();
+        if (empty) empty.classList.remove('hidden');
+        
+        // Reset dropdown
+        dropdownBtn = null;
+        dropdownMenu = null;
+        selectedWebSubValue = null;
+    }
+}
+
+// ============================================
+// HANDLE SUB-CATEGORY CLICK
+// ============================================
+function handleSubClick(mainValue, subValue) {
+    const grid = document.getElementById('grid');
+    const empty = document.getElementById('empty');
+    const subContainer = document.getElementById('subContainer');
+    
+    // Update active state for regular buttons
+    subContainer.querySelectorAll('.sub-btn').forEach(b => {
+        b.classList.remove('active');
+        if (b.dataset.value === subValue) {
+            b.classList.add('active');
+        }
+    });
+    
+    // Hide empty state
+    if (empty) empty.classList.add('hidden');
+    
+    // Show matching products
+    const cards = grid.querySelectorAll('.product-card');
+    let found = false;
+    cards.forEach(card => {
+        const cat = card.dataset.category;
+        const sub = card.dataset.sub;
+        
+        if (cat === mainValue && sub === subValue) {
+            card.classList.add('visible');
+            found = true;
+        } else {
+            card.classList.remove('visible');
+        }
+    });
+    
+    // If no products found, show empty state with message
+    if (!found) {
+        if (empty) {
+            empty.classList.remove('hidden');
+            empty.querySelector('h3').textContent = 'No products found';
+            empty.querySelector('p').textContent = 'Try selecting a different sub-category';
+        }
+    }
+}
+
+// ============================================
+// CLOSE DROPDOWN ON CLICK OUTSIDE
+// ============================================
+document.addEventListener('click', function(e) {
+    document.querySelectorAll('.sub-dropdown-menu.open').forEach(menu => {
+        if (!menu.parentElement.contains(e.target)) {
+            menu.classList.remove('open');
+            const btn = menu.parentElement.querySelector('.sub-dropdown-btn');
+            if (btn) btn.classList.remove('active');
+            // Remove dropdown-open class
+            if (subContainer) {
+                subContainer.classList.remove('dropdown-open');
+            }
+        }
+    });
+});
+
+// ============================================
+// HIDE ALL PRODUCTS
+// ============================================
+function hideAllProducts() {
+    const grid = document.getElementById('grid');
+    if (!grid) return;
+    
+    const cards = grid.querySelectorAll('.product-card');
+    cards.forEach(card => {
+        card.classList.remove('visible');
+    });
+}
+
+// ============================================
+// INITIALIZE
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    const mainSelect = document.getElementById('mainCategory');
+    const subWrapper = document.getElementById('subWrapper');
+    const hint = document.getElementById('hint');
+    const empty = document.getElementById('empty');
+    
+    // Hide sub-scroll initially
+    if (subWrapper) {
+        subWrapper.classList.remove('visible');
+    }
+    if (hint) {
+        hint.classList.add('show');
+        hint.style.display = 'flex';
+    }
+    if (empty) {
+        empty.classList.remove('hidden');
+    }
+    
+    // Set initial state
+    if (mainSelect) {
+        mainSelect.value = '';
+    }
+    
+    // Hide all products
+    hideAllProducts();
+});
+</script>
+
+</body>
+</html>
